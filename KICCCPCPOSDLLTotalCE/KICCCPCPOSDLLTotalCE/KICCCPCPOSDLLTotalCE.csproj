@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Calendar\CalendricalCalculationsHelper.cs" />
     <Compile Include="Kiccc.Ing.PcPos\AmountList.cs" />
     <Compile Include="Kiccc.Ing.PcPos\ConnetionTypes.cs" />
     <Compile Include="Kiccc.Ing.PcPos\Core\IntractingCore.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="Kiccc.Ing.PcPos\VasAmountItem.cs" />
     <Compile Include="Kiccc.Ing.PcPos\VasAmountList.cs" />
     <Compile Include="Kiccc.Ing.PcPos\VasMultiplexPayment.cs" />
+    <Compile Include="Calendar\PersianCalendar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
