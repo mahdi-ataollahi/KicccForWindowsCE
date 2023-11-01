@@ -2,5 +2,5 @@ using System;
 
 namespace Kiccc.Ing.PcPos.TotalPOSClient
 {
-	internal delegate void StateChangedEventHandler(string str);
+    internal delegate void StateChangedEventHandler(string str);
 }

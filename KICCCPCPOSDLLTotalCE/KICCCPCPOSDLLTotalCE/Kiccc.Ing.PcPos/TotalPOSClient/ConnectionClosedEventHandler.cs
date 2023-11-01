@@ -2,5 +2,5 @@ using System;
 
 namespace Kiccc.Ing.PcPos.TotalPOSClient
 {
-	internal delegate void ConnectionClosedEventHandler();
+    internal delegate void ConnectionClosedEventHandler();
 }

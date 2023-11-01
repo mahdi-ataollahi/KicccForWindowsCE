@@ -42,7 +42,8 @@ namespace Kiccc.Ing.PcPos.TotalPOSClient
             get;
         }
 
-        private StringBuilder Sb { get; set; }
+        private StringBuilder Sb { get; set; } = new StringBuilder();
+
         public IPAddress ServeripAddress
         {
             get;
@@ -67,24 +68,8 @@ namespace Kiccc.Ing.PcPos.TotalPOSClient
             ClientSocket.ReceiveDone = new ManualResetEvent(false);
         }
 
-        public ClientSocket(IPAddress serveripAddress, int port)
-            : this(serveripAddress, port, null, 256)
+        public ClientSocket(IPAddress serveripAddress, int port, System.Text.Encoding encoding = null, int buffersize = 256)
         {
-        }
-
-        public ClientSocket(IPAddress serveripAddress, int port, System.Text.Encoding encoding)
-            : this(serveripAddress, port, encoding, 256)
-        {
-        }
-
-        public ClientSocket(IPAddress serveripAddress, int port, int buffersize)
-            : this(serveripAddress, port, null, buffersize)
-        {
-        }
-
-        public ClientSocket(IPAddress serveripAddress, int port, System.Text.Encoding encoding, int buffersize)
-        {
-            this.Sb = new StringBuilder();
             this.ServeripAddress = serveripAddress;
             this.Encoding = encoding ?? System.Text.Encoding.Unicode;
             this.Buffer = new byte[buffersize];
