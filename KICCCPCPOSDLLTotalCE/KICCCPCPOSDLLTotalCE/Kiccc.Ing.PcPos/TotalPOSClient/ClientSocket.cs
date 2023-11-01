@@ -29,6 +29,7 @@ namespace Kiccc.Ing.PcPos.TotalPOSClient
         private System.Text.Encoding Encoding
         {
             get;
+            set;
         }
 
         private bool IsDisposed
@@ -40,13 +41,15 @@ namespace Kiccc.Ing.PcPos.TotalPOSClient
         public int Port
         {
             get;
+            private set;
         }
 
-        private StringBuilder Sb { get; set; } = new StringBuilder();
+        private StringBuilder Sb { get; set; }
 
         public IPAddress ServeripAddress
         {
             get;
+            private set;
         }
 
         public System.Net.Sockets.Socket Socket
@@ -68,8 +71,24 @@ namespace Kiccc.Ing.PcPos.TotalPOSClient
             ClientSocket.ReceiveDone = new ManualResetEvent(false);
         }
 
-        public ClientSocket(IPAddress serveripAddress, int port, System.Text.Encoding encoding = null, int buffersize = 256)
+        public ClientSocket(IPAddress serveripAddress, int port)
+            : this(serveripAddress, port, null, 256)
         {
+        }
+
+        public ClientSocket(IPAddress serveripAddress, int port, System.Text.Encoding encoding)
+            : this(serveripAddress, port, encoding, 256)
+        {
+        }
+
+        public ClientSocket(IPAddress serveripAddress, int port, int buffersize)
+            : this(serveripAddress, port, null, buffersize)
+        {
+        }
+
+        public ClientSocket(IPAddress serveripAddress, int port, System.Text.Encoding encoding, int buffersize)
+        {
+            this.Sb = new StringBuilder();
             this.ServeripAddress = serveripAddress;
             this.Encoding = encoding ?? System.Text.Encoding.Unicode;
             this.Buffer = new byte[buffersize];
@@ -117,7 +136,8 @@ namespace Kiccc.Ing.PcPos.TotalPOSClient
                 System.Net.Sockets.Socket socket = this.Socket;
                 if (socket != null)
                 {
-                    socket.Disconnect(true);
+                    //socket.Disconnect(true);
+                    socket.Close();
                 }
                 else
                 {
@@ -335,8 +355,8 @@ namespace Kiccc.Ing.PcPos.TotalPOSClient
                 IPEndPoint remoteEp = new IPEndPoint(this.ServeripAddress, this.Port);
                 this.Socket = new System.Net.Sockets.Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
                 {
-                    ReceiveTimeout = 200000,
-                    SendTimeout = 200000
+                    //ReceiveTimeout = 200000,
+                    //SendTimeout = 200000
                 };
                 this.Socket.Connect(remoteEp);
                 this.Receive();

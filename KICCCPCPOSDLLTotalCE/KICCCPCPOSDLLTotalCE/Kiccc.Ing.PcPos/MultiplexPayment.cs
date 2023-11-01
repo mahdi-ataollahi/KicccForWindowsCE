@@ -5,10 +5,10 @@ using System.Text.RegularExpressions;
 
 namespace Kiccc.Ing.PcPos
 {
-    [ClassInterface(ClassInterfaceType.AutoDual)]
+    //[ClassInterface(ClassInterfaceType.AutoDual)]
     [ComVisible(true)]
     [Guid("DE154DC2-1265-47C3-8F9A-EC92692D6EFF")]
-    [ProgId("Kiccc.Ing.PcPos.MultiplexPayment")]
+    //[ProgId("Kiccc.Ing.PcPos.MultiplexPayment")]
     [Serializable]
     public class MultiplexPayment : IMultiplexPayment
     {
@@ -28,7 +28,7 @@ namespace Kiccc.Ing.PcPos
 
         private string _specialPaymentId;
 
-        public AmountList Amounts { get; set; } = new AmountList();
+        public AmountList Amounts { get; set; }
 
         public string BankCode
         {
@@ -160,6 +160,7 @@ namespace Kiccc.Ing.PcPos
 
         public MultiplexPayment()
         {
+            Amounts = new AmountList();
         }
     }
 }

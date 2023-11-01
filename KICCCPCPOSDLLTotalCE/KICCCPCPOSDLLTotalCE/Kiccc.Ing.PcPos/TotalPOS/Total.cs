@@ -16,20 +16,19 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Timers;
 using System.Xml;
 
 namespace Kiccc.Ing.PcPos.TotalPOS
 {
-    [ClassInterface(ClassInterfaceType.AutoDual)]
+    //[ClassInterface(ClassInterfaceType.AutoDual)]
     [ComVisible(true)]
     [Guid("DAE235E2-DC2A-4DD1-9EE1-096FCB0B7B55")]
-    [ProgId("Kiccc.Ing.PcPos.TotalPOS.TotalPOS")]
+    //[ProgId("Kiccc.Ing.PcPos.TotalPOS.TotalPOS")]
     public class Total : IntractingCore, IDisposable, ITotal
     {
         private bool _timeOutReached;
 
-        private System.Timers.Timer _timeOutTimer;
+        private System.Threading.Timer _timeOutTimer;
 
         private const string LogPhraseId = "12713803";
 
@@ -220,9 +219,13 @@ namespace Kiccc.Ing.PcPos.TotalPOS
             if (dispose)
             {
                 this.Dispose(false);
-                if ((this._currentOps == null ? false : this._currentOps.IsAlive))
+                if (this._currentOps != null)
                 {
-                    this._currentOps.Abort();
+                    try
+                    {
+                        this._currentOps.Abort();
+                    }
+                    catch (System.Threading.ThreadStateException) { }
                 }
                 if (this.SerialPort != null)
                 {
@@ -230,8 +233,7 @@ namespace Kiccc.Ing.PcPos.TotalPOS
                 }
                 if (this._timeOutTimer != null)
                 {
-                    this._timeOutTimer.Stop();
-                    this._timeOutTimer.Enabled = false;
+                    this._timeOutTimer.Change(Timeout.Infinite, Timeout.Infinite); // stop
                     this._timeOutTimer.Dispose();
                 }
                 this._isDisposed = true;
@@ -253,8 +255,7 @@ namespace Kiccc.Ing.PcPos.TotalPOS
                             eventInfo.RemoveEventHandler(this._timeOutTimer, del);
                         }
                     }
-                    this._timeOutTimer.Stop();
-                    this._timeOutTimer.Enabled = false;
+                    this._timeOutTimer.Change(Timeout.Infinite, Timeout.Infinite); // stop
                     this._timeOutTimer.Dispose();
                 }
                 if (this.SerialPort != null)
@@ -344,7 +345,12 @@ namespace Kiccc.Ing.PcPos.TotalPOS
         {
         }
 
-        public void InitiateService(string serialNo, string acceptorId, string terminalId, string ipAddress, int port, int timeOut = 200)
+        public void InitiateService(string serialNo, string acceptorId, string terminalId, string ipAddress, int port)
+        {
+            InitiateService(serialNo, acceptorId, terminalId, ipAddress, port, 200);
+        }
+
+        public void InitiateService(string serialNo, string acceptorId, string terminalId, string ipAddress, int port, int timeOut)
         {
             this.SerialNo = serialNo;
             this.AcceptorId = acceptorId;
@@ -358,7 +364,12 @@ namespace Kiccc.Ing.PcPos.TotalPOS
             this.DoLogSetting();
         }
 
-        public void InitiateService(string serialNo, string acceptorId, string terminalId, string comPort, int baudRate, int dataBits, SerialPortStopBit stopBit, SerialPortParity parity, int timeOut = 200)
+        public void InitiateService(string serialNo, string acceptorId, string terminalId, string comPort, int baudRate, int dataBits, SerialPortStopBit stopBit, SerialPortParity parity)
+        {
+            InitiateService(serialNo, acceptorId, terminalId, comPort, baudRate, dataBits, stopBit, parity, 200);
+        }
+
+        public void InitiateService(string serialNo, string acceptorId, string terminalId, string comPort, int baudRate, int dataBits, SerialPortStopBit stopBit, SerialPortParity parity, int timeOut)
         {
             this.SerialNo = serialNo;
             this.AcceptorId = acceptorId;
@@ -379,7 +390,12 @@ namespace Kiccc.Ing.PcPos.TotalPOS
             this.ConnetionType = ConnetionTypes.Serial;
         }
 
-        public void InitiateService(string serialNo, string acceptorId, string terminalId, string comPort, int baudRate, int dataBits, int stopBit, int parity, int timeOut = 200)
+        public void InitiateService(string serialNo, string acceptorId, string terminalId, string comPort, int baudRate, int dataBits, int stopBit, int parity)
+        {
+            InitiateService(serialNo, acceptorId, terminalId, comPort, baudRate, dataBits, stopBit, parity, 200);
+        }
+
+        public void InitiateService(string serialNo, string acceptorId, string terminalId, string comPort, int baudRate, int dataBits, int stopBit, int parity, int timeOut)
         {
             this.InitiateService(serialNo, acceptorId, terminalId, comPort, baudRate, dataBits, (SerialPortStopBit)stopBit, (SerialPortParity)parity, timeOut);
         }
@@ -408,7 +424,9 @@ namespace Kiccc.Ing.PcPos.TotalPOS
 
         protected virtual new void OnResponseReceived(ResponseReceivedEventArgs e)
         {
-            (new EventHelper()).RaiseAsync(this.ResponseReceived, new object[] { this, e });
+            // TODO EventHelper
+            //(new EventHelper()).RaiseAsync(this.ResponseReceived, new object[] { this, e });
+            if (ResponseReceived != null) ResponseReceived(this, e);
         }
 
         internal static string ParseMessage(string receivedstr)
@@ -481,18 +499,14 @@ namespace Kiccc.Ing.PcPos.TotalPOS
                 throw new Exception("System resources occupancy\r\bInitiate Service");
             }
             base.State = ReadyState.Busy;
-            this._timeOutTimer = new System.Timers.Timer()
-            {
-                Interval = (double)this.TimeOut
-            };
-            this._timeOutTimer.Elapsed += new ElapsedEventHandler((object sender, ElapsedEventArgs e) =>
+            this._timeOutTimer = new System.Threading.Timer((object sender) =>
             {
                 if ((!this.GenerateLog ? false : this.LogPhrase.Equals("12713803")))
                 {
                     Kiccc.Ing.PcPos.Logger.Logger.Log(Kiccc.Ing.PcPos.Logger.Logger.Type.Description, "Timeout Reached . No Response !!!", this.LogPath);
                 }
                 this._timeOutReached = true;
-            });
+            }, null, Timeout.Infinite, Timeout.Infinite);
             try
             {
                 string str1 = null;
@@ -547,7 +561,7 @@ namespace Kiccc.Ing.PcPos.TotalPOS
                         {
                             Kiccc.Ing.PcPos.Logger.Logger.Log(Kiccc.Ing.PcPos.Logger.Logger.Type.Description, "Parsing Message ...", this.LogPath);
                         }
-                        str1 = Encoding.ASCII.GetString(receiveBuffer.ToArray());
+                        str1 = Encoding.ASCII.GetString(receiveBuffer.ToArray(), 0, receiveBuffer.Count);
                         if ((!this.GenerateLog ? false : this.LogPhrase.Equals("12713803")))
                         {
                             Kiccc.Ing.PcPos.Logger.Logger.Log(Kiccc.Ing.PcPos.Logger.Logger.Type.Response, str1, this.LogPath);
@@ -582,8 +596,7 @@ namespace Kiccc.Ing.PcPos.TotalPOS
                 this.SerialPort.BaseStream.Flush();
                 this.SerialPort.Write(messageBuffer, 0, (int)messageBuffer.Length);
                 this.SerialPort.BaseStream.Flush();
-                this._timeOutTimer.Enabled = true;
-                this._timeOutTimer.Start();
+                this._timeOutTimer.Change(this.TimeOut, this.TimeOut); // start
                 if ((!this.GenerateLog ? false : this.LogPhrase.Equals("12713803")))
                 {
                     Kiccc.Ing.PcPos.Logger.Logger.Log(Kiccc.Ing.PcPos.Logger.Logger.Type.Description, "Waiting For Response ...", this.LogPath);
@@ -635,18 +648,14 @@ namespace Kiccc.Ing.PcPos.TotalPOS
                 throw new Exception("System resources occupancy\r\bInitiate Service");
             }
             base.State = ReadyState.Busy;
-            this._timeOutTimer = new System.Timers.Timer()
-            {
-                Interval = (double)this.TimeOut
-            };
-            this._timeOutTimer.Elapsed += new ElapsedEventHandler((object sender, ElapsedEventArgs e) =>
+            this._timeOutTimer = new System.Threading.Timer((object sender) =>
             {
                 if ((!this.GenerateLog ? false : this.LogPhrase.Equals("12713803")))
                 {
                     Kiccc.Ing.PcPos.Logger.Logger.Log(Kiccc.Ing.PcPos.Logger.Logger.Type.Description, "Timeout Reached . No Response !!!", this.LogPath);
                 }
                 this._timeOutReached = true;
-            });
+            }, null, Timeout.Infinite, Timeout.Infinite);
             try
             {
                 string str1 = null;
@@ -701,7 +710,7 @@ namespace Kiccc.Ing.PcPos.TotalPOS
                         {
                             Kiccc.Ing.PcPos.Logger.Logger.Log(Kiccc.Ing.PcPos.Logger.Logger.Type.Description, "Parsing Message ...", this.LogPath);
                         }
-                        str1 = Encoding.ASCII.GetString(receiveBuffer.ToArray());
+                        str1 = Encoding.ASCII.GetString(receiveBuffer.ToArray(), 0, receiveBuffer.Count);
                         if ((!this.GenerateLog ? false : this.LogPhrase.Equals("12713803")))
                         {
                             Kiccc.Ing.PcPos.Logger.Logger.Log(Kiccc.Ing.PcPos.Logger.Logger.Type.Response, str1, this.LogPath);
@@ -736,8 +745,7 @@ namespace Kiccc.Ing.PcPos.TotalPOS
                 this.SerialPort.BaseStream.Flush();
                 this.SerialPort.Write(messageBuffer, 0, (int)messageBuffer.Length);
                 this.SerialPort.BaseStream.Flush();
-                this._timeOutTimer.Enabled = true;
-                this._timeOutTimer.Start();
+                this._timeOutTimer.Change(this.TimeOut, this.TimeOut); // start
                 if ((!this.GenerateLog ? false : this.LogPhrase.Equals("12713803")))
                 {
                     Kiccc.Ing.PcPos.Logger.Logger.Log(Kiccc.Ing.PcPos.Logger.Logger.Type.Description, "Waiting For Response ...", this.LogPath);
@@ -789,11 +797,7 @@ namespace Kiccc.Ing.PcPos.TotalPOS
             }
             base.State = ReadyState.Busy;
             this.mre.Reset();
-            this._timeOutTimer = new System.Timers.Timer()
-            {
-                Interval = (double)this.TimeOut
-            };
-            this._timeOutTimer.Elapsed += new ElapsedEventHandler((object sender, ElapsedEventArgs e) =>
+            this._timeOutTimer = new System.Threading.Timer((object sender) =>
             {
                 if ((!this.GenerateLog ? false : this.LogPhrase.Equals("12713803")))
                 {
@@ -801,7 +805,7 @@ namespace Kiccc.Ing.PcPos.TotalPOS
                 }
                 this._timeOutReached = true;
                 this.mre.Set();
-            });
+            }, null, Timeout.Infinite, Timeout.Infinite);
             try
             {
                 string str2 = null;
@@ -854,8 +858,7 @@ namespace Kiccc.Ing.PcPos.TotalPOS
                     {
                         Kiccc.Ing.PcPos.Logger.Logger.Log(Kiccc.Ing.PcPos.Logger.Logger.Type.Request, "Establishing Connection ...", this.LogPath);
                     }
-                    this._timeOutTimer.Enabled = true;
-                    this._timeOutTimer.Start();
+                    this._timeOutTimer.Change(this.TimeOut, this.TimeOut); // start
                     Total.Client.Start();
                     if ((!this.GenerateLog ? false : this.LogPhrase.Equals("12713803")))
                     {
@@ -914,18 +917,14 @@ namespace Kiccc.Ing.PcPos.TotalPOS
                 throw new Exception("System resources occupancy\r\bInitiate Service");
             }
             base.State = ReadyState.Busy;
-            this._timeOutTimer = new System.Timers.Timer()
-            {
-                Interval = (double)this.TimeOut
-            };
-            this._timeOutTimer.Elapsed += new ElapsedEventHandler((object sender, ElapsedEventArgs e) =>
+            this._timeOutTimer = new System.Threading.Timer((object sender) =>
             {
                 if ((!this.GenerateLog ? false : this.LogPhrase.Equals("12713803")))
                 {
                     Kiccc.Ing.PcPos.Logger.Logger.Log(Kiccc.Ing.PcPos.Logger.Logger.Type.Description, "Timeout Reached . No Response !!!", this.LogPath);
                 }
                 this._timeOutReached = true;
-            });
+            }, null, Timeout.Infinite, Timeout.Infinite);
             try
             {
                 string str2 = null;
@@ -975,8 +974,7 @@ namespace Kiccc.Ing.PcPos.TotalPOS
                     {
                         Kiccc.Ing.PcPos.Logger.Logger.Log(Kiccc.Ing.PcPos.Logger.Logger.Type.Request, "Establishing Connection ...", this.LogPath);
                     }
-                    this._timeOutTimer.Enabled = true;
-                    this._timeOutTimer.Start();
+                    this._timeOutTimer.Change(this.TimeOut, this.TimeOut); // start
                     client.Start();
                     if ((!this.GenerateLog ? false : this.LogPhrase.Equals("12713803")))
                     {
@@ -1120,6 +1118,7 @@ namespace Kiccc.Ing.PcPos.TotalPOS
             public MessageType MessageType
             {
                 get;
+                private set;
             }
 
             public bool MustHaveFixedLenght
@@ -1652,6 +1651,11 @@ namespace Kiccc.Ing.PcPos.TotalPOS
                 set;
             }
 
+            public MessageStructure()
+                : this(MessageType.Sale)
+            {
+            }
+
             public MessageStructure(MessageType type)
             {
                 this.MessageType = type;
@@ -1660,7 +1664,9 @@ namespace Kiccc.Ing.PcPos.TotalPOS
             public static Total.MessageStructure Create(MessageType type)
             {
                 string str;
-                object i = Activator.CreateInstance(typeof(Total.MessageStructure), new object[] { type });
+                object i = Activator.CreateInstance(typeof(Total.MessageStructure));
+                if (type != MessageType.Sale)
+                    ((Total.MessageStructure)i).MessageType = type;
                 PropertyInfo[] properties = i.GetType().GetProperties();
                 for (int num = 0; num < (int)properties.Length; num++)
                 {

@@ -5,10 +5,10 @@ using System.Text.RegularExpressions;
 
 namespace Kiccc.Ing.PcPos
 {
-    [ClassInterface(ClassInterfaceType.AutoDual)]
+    //[ClassInterface(ClassInterfaceType.AutoDual)]
     [ComVisible(true)]
     [Guid("608B2F1F-5DB2-4597-8303-817E2F034F9B")]
-    [ProgId("Kiccc.Ing.PcPos.VasMultiplexPayment")]
+    //[ProgId("Kiccc.Ing.PcPos.VasMultiplexPayment")]
     [Serializable]
     public class VasMultiplexPayment : IVasMultiplexPayment
     {
@@ -16,7 +16,7 @@ namespace Kiccc.Ing.PcPos
 
         private int _index;
 
-        public VasAmountList Amounts { get; set; } = new VasAmountList();
+        public VasAmountList Amounts { get; set; }
 
         public int Index
         {
@@ -52,6 +52,7 @@ namespace Kiccc.Ing.PcPos
 
         public VasMultiplexPayment()
         {
+            Amounts = new VasAmountList();
         }
     }
 }

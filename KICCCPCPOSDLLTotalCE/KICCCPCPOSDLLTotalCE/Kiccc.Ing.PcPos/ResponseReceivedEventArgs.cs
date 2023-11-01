@@ -4,10 +4,10 @@ using System.Runtime.InteropServices;
 
 namespace Kiccc.Ing.PcPos
 {
-    [ClassInterface(ClassInterfaceType.AutoDual)]
+    //[ClassInterface(ClassInterfaceType.AutoDual)]
     [ComVisible(true)]
     [Guid("5d9817cb-177d-46d2-9cbe-07834eee6a3d")]
-    [ProgId("Kiccc.Ing.PcPos.ResponseReceivedEventArgs")]
+    //[ProgId("Kiccc.Ing.PcPos.ResponseReceivedEventArgs")]
     public class ResponseReceivedEventArgs : EventArgs, IResponseReceivedEventArgs
     {
         public string Response
@@ -34,7 +34,12 @@ namespace Kiccc.Ing.PcPos
             this.JustDecompileGenerated_Response_k__BackingField = value;
         }
 
-        public ResponseReceivedEventArgs(string response = null)
+        public ResponseReceivedEventArgs()
+            : this(null)
+        {
+        }
+
+        public ResponseReceivedEventArgs(string response)
         {
             this.Response = response;
         }

@@ -624,7 +624,7 @@ namespace Kiccc.Ing.PcPos.Core
 
         public void CalcelSale()
         {
-            this.JustSend(-10.ToString());
+            this.JustSend((-10).ToString());
         }
 
         public static string Calculate(VasPaymentItem[] paymentItems)
@@ -786,7 +786,9 @@ namespace Kiccc.Ing.PcPos.Core
 
         protected virtual void OnResponseReceived(ResponseReceivedEventArgs e)
         {
-            (new EventHelper()).RaiseAsync(this.ResponseReceived, new object[] { this, e });
+            // TODO EventHelper
+            //(new EventHelper()).RaiseAsync(this.ResponseReceived, new object[] { this, e });
+            if (ResponseReceived != null) ResponseReceived(this, e);
         }
 
         public string Sale(string amount)

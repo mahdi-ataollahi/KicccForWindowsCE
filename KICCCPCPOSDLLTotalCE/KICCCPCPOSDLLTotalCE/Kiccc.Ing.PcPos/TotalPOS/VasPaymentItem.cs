@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 
 namespace Kiccc.Ing.PcPos.TotalPOS
 {
-    [ClassInterface(ClassInterfaceType.AutoDual)]
+    //[ClassInterface(ClassInterfaceType.AutoDual)]
     [ComSourceInterfaces(typeof(IVasPaymentItem))]
     [ComVisible(true)]
     [Guid("94047997-FB15-49B1-96CC-048A675E5107")]
-    [ProgId("Kiccc.PcPos.VasPaymentItem")]
+    //[ProgId("Kiccc.PcPos.VasPaymentItem")]
     public class VasPaymentItem : IVasPaymentItem
     {
         private string _amount;

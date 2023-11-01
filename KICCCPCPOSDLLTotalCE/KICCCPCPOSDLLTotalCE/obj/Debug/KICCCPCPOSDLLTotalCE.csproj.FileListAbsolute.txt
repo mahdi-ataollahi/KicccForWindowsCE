@@ -1,1 +1,5 @@
 D:\Projects\Personal\Labkhand  3V2.7- IR - No Cart - 97-04-03\KicccForWindowsCE\KICCCPCPOSDLLTotalCE\KICCCPCPOSDLLTotalCE\obj\Debug\ResolveAssemblyReference.cache
+D:\Projects\Personal\Labkhand  3V2.7- IR - No Cart - 97-04-03\KicccForWindowsCE\KICCCPCPOSDLLTotalCE\KICCCPCPOSDLLTotalCE\bin\Debug\KICCCPCPOSDLLTotalCE.dll
+D:\Projects\Personal\Labkhand  3V2.7- IR - No Cart - 97-04-03\KicccForWindowsCE\KICCCPCPOSDLLTotalCE\KICCCPCPOSDLLTotalCE\bin\Debug\KICCCPCPOSDLLTotalCE.pdb
+D:\Projects\Personal\Labkhand  3V2.7- IR - No Cart - 97-04-03\KicccForWindowsCE\KICCCPCPOSDLLTotalCE\KICCCPCPOSDLLTotalCE\obj\Debug\KICCCPCPOSDLLTotalCE.dll
+D:\Projects\Personal\Labkhand  3V2.7- IR - No Cart - 97-04-03\KicccForWindowsCE\KICCCPCPOSDLLTotalCE\KICCCPCPOSDLLTotalCE\obj\Debug\KICCCPCPOSDLLTotalCE.pdb
