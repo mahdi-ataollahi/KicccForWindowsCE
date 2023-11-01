@@ -16,7 +16,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Timers;
 using System.Xml;
 
 namespace Kiccc.Ing.PcPos.TotalPOS
@@ -24,12 +23,12 @@ namespace Kiccc.Ing.PcPos.TotalPOS
 	[ClassInterface(ClassInterfaceType.AutoDual)]
 	[ComVisible(true)]
 	[Guid("DAE235E2-DC2A-4DD1-9EE1-096FCB0B7B55")]
-	[ProgId("Kiccc.Ing.PcPos.TotalPOS.TotalPOS")]
+	//[ProgId("Kiccc.Ing.PcPos.TotalPOS.TotalPOS")]
 	public class Total : IntractingCore, IDisposable, ITotal
 	{
 		private bool _timeOutReached;
 
-		private System.Timers.Timer _timeOutTimer;
+		private System.Threading.Timer _timeOutTimer;
 
 		private const string LogPhraseId = "12713803";
 
@@ -230,8 +229,7 @@ namespace Kiccc.Ing.PcPos.TotalPOS
 				}
 				if (this._timeOutTimer != null)
 				{
-					this._timeOutTimer.Stop();
-					this._timeOutTimer.Enabled = false;
+                    this._timeOutTimer.Change(Timeout.Infinite, Timeout.Infinite);
 					this._timeOutTimer.Dispose();
 				}
 				this._isDisposed = true;
@@ -344,7 +342,12 @@ namespace Kiccc.Ing.PcPos.TotalPOS
 		{
 		}
 
-		public void InitiateService(string serialNo, string acceptorId, string terminalId, string ipAddress, int port, int timeOut = 200)
+		public void InitiateService(string serialNo, string acceptorId, string terminalId, string ipAddress, int port)
+        {
+            InitiateService(serialNo, acceptorId, terminalId, ipAddress, port, 200);
+        }
+
+		public void InitiateService(string serialNo, string acceptorId, string terminalId, string ipAddress, int port, int timeOut)
 		{
 			this.SerialNo = serialNo;
 			this.AcceptorId = acceptorId;
@@ -358,7 +361,12 @@ namespace Kiccc.Ing.PcPos.TotalPOS
 			this.DoLogSetting();
 		}
 
-		public void InitiateService(string serialNo, string acceptorId, string terminalId, string comPort, int baudRate, int dataBits, SerialPortStopBit stopBit, SerialPortParity parity, int timeOut = 200)
+		public void InitiateService(string serialNo, string acceptorId, string terminalId, string comPort, int baudRate, int dataBits, SerialPortStopBit stopBit, SerialPortParity parity)
+        {
+		    InitiateService(serialNo, acceptorId, terminalId, comPort, baudRate, dataBits, stopBit, parity, 200);
+        }
+
+		public void InitiateService(string serialNo, string acceptorId, string terminalId, string comPort, int baudRate, int dataBits, SerialPortStopBit stopBit, SerialPortParity parity, int timeOut)
 		{
 			this.SerialNo = serialNo;
 			this.AcceptorId = acceptorId;
@@ -379,7 +387,12 @@ namespace Kiccc.Ing.PcPos.TotalPOS
 			this.ConnetionType = ConnetionTypes.Serial;
 		}
 
-		public void InitiateService(string serialNo, string acceptorId, string terminalId, string comPort, int baudRate, int dataBits, int stopBit, int parity, int timeOut = 200)
+		public void InitiateService(string serialNo, string acceptorId, string terminalId, string comPort, int baudRate, int dataBits, int stopBit, int parity)
+        {
+            InitiateService(serialNo, acceptorId, terminalId, comPort, baudRate, dataBits, stopBit, parity, 200);
+        }
+
+		public void InitiateService(string serialNo, string acceptorId, string terminalId, string comPort, int baudRate, int dataBits, int stopBit, int parity, int timeOut)
 		{
 			this.InitiateService(serialNo, acceptorId, terminalId, comPort, baudRate, dataBits, (SerialPortStopBit)stopBit, (SerialPortParity)parity, timeOut);
 		}
@@ -1064,10 +1077,11 @@ namespace Kiccc.Ing.PcPos.TotalPOS
 		{
 			private string _default;
 
+			bool _appearIfNull;
 			public bool AppearIfNull
 			{
-				get;
-				set;
+                get { return _appearIfNull; }
+                set { _appearIfNull = value; }
 			}
 
 			public string Default
@@ -1083,52 +1097,61 @@ namespace Kiccc.Ing.PcPos.TotalPOS
 				}
 			}
 
+            bool _doTrim;
 			public bool DoTrim
 			{
-				get;
-				set;
+                get { return _doTrim; }
+                set { _doTrim = value; }
 			}
 
+            bool _generateDefaultValue;
 			public bool GenerateDefaultValue
-			{
-				get;
-				set;
-			}
+            {
+                get { return _generateDefaultValue; }
+                set { _generateDefaultValue = value; }
+            }
 
+            int _maxLenght;
 			public int MaxLenght
-			{
-				get;
-				set;
-			}
+            {
+                get { return _maxLenght; }
+                set { _maxLenght = value; }
+            }
 
+            MessageType _messageType;
 			public MessageType MessageType
-			{
-				get;
-			}
+            {
+                get { return _messageType; }
+                private set { _messageType = value; }
+            }
 
+			bool _mustHaveFixedLenght;
 			public bool MustHaveFixedLenght
-			{
-				get;
-				set;
-			}
+            {
+                get { return _mustHaveFixedLenght; }
+                set { _mustHaveFixedLenght = value; }
+            }
 
+			bool _mustHaveFixedLenghtIfEmpty;
 			public bool MustHaveFixedLenghtIfEmpty
-			{
-				get;
-				set;
-			}
+            {
+                get { return _mustHaveFixedLenghtIfEmpty; }
+                set { _mustHaveFixedLenghtIfEmpty = value; }
+            }
 
+			int _order;
 			public int Order
-			{
-				get;
-				set;
-			}
+            {
+                get { return _order; }
+                set { _order = value; }
+            }
 
+			PaddingOption _paddingOption;
 			public PaddingOption PaddingOption
-			{
-				get;
-				set;
-			}
+            {
+                get { return _paddingOption; }
+                set { _paddingOption = value; }
+            }
 
 			public MessageIndicator(MessageType messageType)
 			{

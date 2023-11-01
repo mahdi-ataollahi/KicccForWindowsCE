@@ -9,7 +9,7 @@ namespace Kiccc.Ing.PcPos
 	[ClassInterface(ClassInterfaceType.AutoDual)]
 	[ComVisible(true)]
 	[Guid("AC4177AF-0871-4ABF-BB09-EA41573FCDEC")]
-	[ProgId("Kiccc.Ing.PcPos.VasAmountList")]
+	//[ProgId("Kiccc.Ing.PcPos.VasAmountList")]
 	[Serializable]
 	public class VasAmountList : IVasAmountList
 	{

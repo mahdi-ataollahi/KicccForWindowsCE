@@ -147,13 +147,16 @@ namespace Kiccc.Ing.PcPos.TotalPOS
 		void InitiateService();
 
 		[DispId(27)]
-		void InitiateService(string serialNo, string acceptorId, string terminalId, string ipAddress, int port, int timeOut = 200);
+		void InitiateService(string serialNo, string acceptorId, string terminalId, string ipAddress, int port, int timeOut);
+		void InitiateService(string serialNo, string acceptorId, string terminalId, string ipAddress, int port);
 
 		[DispId(52)]
-		void InitiateService(string serialNo, string acceptorId, string terminalId, string comPort, int baudRate, int dataBits, SerialPortStopBit stopBit, SerialPortParity parity, int timeOut = 200);
+		void InitiateService(string serialNo, string acceptorId, string terminalId, string comPort, int baudRate, int dataBits, SerialPortStopBit stopBit, SerialPortParity parity, int timeOut);
+		void InitiateService(string serialNo, string acceptorId, string terminalId, string comPort, int baudRate, int dataBits, SerialPortStopBit stopBit, SerialPortParity parity);
 
 		[DispId(53)]
-		void InitiateService(string serialNo, string acceptorId, string terminalId, string comPort, int baudRate, int dataBits, int stopBit, int parity, int timeOut = 200);
+		void InitiateService(string serialNo, string acceptorId, string terminalId, string comPort, int baudRate, int dataBits, int stopBit, int parity, int timeOut);
+		void InitiateService(string serialNo, string acceptorId, string terminalId, string comPort, int baudRate, int dataBits, int stopBit, int parity);
 
 		[DispId(2)]
 		string MultiplexPayment(MultiplexPayment multiplexPayment);

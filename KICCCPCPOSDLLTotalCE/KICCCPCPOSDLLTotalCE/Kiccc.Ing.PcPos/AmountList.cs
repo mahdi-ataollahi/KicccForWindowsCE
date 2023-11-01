@@ -8,7 +8,7 @@ namespace Kiccc.Ing.PcPos
 	[ClassInterface(ClassInterfaceType.AutoDual)]
 	[ComVisible(true)]
 	[Guid("B7DE252E-8AB0-4972-BB1B-186A5C8899CB")]
-	[ProgId("Kiccc.Ing.PcPos.AmountList")]
+	//[ProgId("Kiccc.Ing.PcPos.AmountList")]
 	[Serializable]
 	public class AmountList : IAmountList
 	{
