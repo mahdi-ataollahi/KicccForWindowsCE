@@ -1,0 +1,113 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{23A12BD2-55A0-49AF-BA8A-50634FEA998A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>KICCCPCPOSDLLTotalCE</RootNamespace>
+    <AssemblyName>KICCCPCPOSDLLTotalCE</AssemblyName>
+    <ProjectTypeGuids>{4D628B5B-2FBC-4AA6-8C16-197242AEB884};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <PlatformFamilyName>WindowsCE</PlatformFamilyName>
+    <PlatformID>E2BECB1F-8C8C-41ba-B736-9BE7D946A398</PlatformID>
+    <OSVersion>5.0</OSVersion>
+    <DeployDirSuffix>KICCCPCPOSDLLTotalCE</DeployDirSuffix>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <NativePlatformName>Windows CE</NativePlatformName>
+    <FormFactorID>
+    </FormFactorID>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;$(PlatformFamilyName)</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <FileAlignment>512</FileAlignment>
+    <WarningLevel>4</WarningLevel>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;$(PlatformFamilyName)</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <FileAlignment>512</FileAlignment>
+    <WarningLevel>4</WarningLevel>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Kiccc.Ing.PcPos\AmountList.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\ConnetionTypes.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\Core\IntractingCore.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\EventHelper.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\FakeResponseType.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\IAmountList.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\IMultiplexPayment.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\IResponseReceivedEventArgs.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\IVasAmountItem.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\IVasAmountList.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\IVasMultiplexPayment.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\Logger\Logger.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\MessageType.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\MultiplexPayment.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\Multiplex\MultiplexParameterGenerator.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\Multiplex\Verhoeff.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\PaddingOption.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\PaymentRequest.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\ReadyState.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\ResponseReceivedEventArgs.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\ResponseReceivedEventHandler.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\SerialPortParity.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\SerialPortStopBit.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\TotalPOSClient\ClientSocket.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\TotalPOSClient\ConnectedEventHandler.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\TotalPOSClient\ConnectionClosedEventHandler.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\TotalPOSClient\DataReceivedEventHandler.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\TotalPOSClient\DataSentEventHandler.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\TotalPOSClient\ExecptionOccuredEventHandler.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\TotalPOSClient\SocketState.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\TotalPOSClient\StateChangedEventHandler.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\TotalPOS\ITotal.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\TotalPOS\IVasPaymentItem.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\TotalPOS\PosResponse.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\TotalPOS\Total.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\TotalPOS\VasPaymentItem.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\VasAmountItem.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\VasAmountList.cs" />
+    <Compile Include="Kiccc.Ing.PcPos\VasMultiplexPayment.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}">
+        <HostingProcess disable="1" />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
